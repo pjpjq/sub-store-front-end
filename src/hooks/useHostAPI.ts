@@ -5,6 +5,7 @@ import service from '@/api';
 import axios from 'axios';
 import { initStores } from '@/utils/initApp';
 import { isValidShareBaseUrl, normalizeShareBaseUrl } from '@/utils/share';
+import { getApiCheckTimeout } from '@/utils/requestTimeout';
 
 const lsKey = 'hostAPI';
 const defaultAPI = import.meta.env.VITE_API_URL || 'https://sub.store';
@@ -325,7 +326,7 @@ export const useHostAPI = () => {
           try {
             // 测试API连接是否有效
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), localStorage.getItem('timeout') ? parseInt(localStorage.getItem('timeout') as string, 10) : 3000); // 3秒超时
+            const timeoutId = setTimeout(() => controller.abort(), getApiCheckTimeout()); // 默认15秒超时
 
             const res = await axios.get<{ status: 'success' | 'failed' }>(
               url + '/api/utils/env',
@@ -379,7 +380,7 @@ export const useHostAPI = () => {
 
           // 测试API连接是否有效，添加超时处理
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), localStorage.getItem('timeout') ? parseInt(localStorage.getItem('timeout') as string, 10) : 3000); // 3秒超时
+          const timeoutId = setTimeout(() => controller.abort(), getApiCheckTimeout()); // 默认15秒超时
 
           try {
             const res = await axios.get<{ status: 'success' | 'failed' }>(
@@ -441,7 +442,7 @@ export const useHostAPI = () => {
           try {
             // 测试API连接是否有效
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), localStorage.getItem('timeout') ? parseInt(localStorage.getItem('timeout') as string, 10) : 3000); // 3秒超时
+            const timeoutId = setTimeout(() => controller.abort(), getApiCheckTimeout()); // 默认15秒超时
 
             const res = await axios.get<{ status: 'success' | 'failed' }>(
               apiUrl + '/api/utils/env',
@@ -497,7 +498,7 @@ export const useHostAPI = () => {
 
           // 测试API连接是否有效，添加超时处理
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), localStorage.getItem('timeout') ? parseInt(localStorage.getItem('timeout') as string, 10) : 3000); // 3秒超时
+          const timeoutId = setTimeout(() => controller.abort(), getApiCheckTimeout()); // 默认15秒超时
 
           try {
             const res = await axios.get<{ status: 'success' | 'failed' }>(

@@ -5,6 +5,7 @@ import { useArtifactsStore } from "@/store/artifacts";
 import { useGlobalStore } from "@/store/global";
 import { useSettingsStore } from "@/store/settings";
 import { useSubsStore } from "@/store/subs";
+import { getApiCheckTimeout } from "@/utils/requestTimeout";
 // import { Toast } from '@nutui/nutui';
 
 export const initStores = async (
@@ -37,11 +38,11 @@ export const initStores = async (
 
     // 尝试获取后端环境信息，这是判断后端连接是否成功的关键
     try {
-      // 设置超时，如果3秒内无法连接，则认为连接失败
+      // 设置超时，默认15秒内无法连接，则认为连接失败
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => {
           reject(new Error('Backend connection timeout'));
-        }, localStorage.getItem('timeout') ? parseInt(localStorage.getItem('timeout') as string, 10) : 3000); // 3秒超时
+        }, getApiCheckTimeout()); // 默认15秒超时
       });
 
       // 尝试获取环境信息
